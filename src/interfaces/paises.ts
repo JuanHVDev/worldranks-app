@@ -6,6 +6,7 @@ export interface Paises {
     population: number;
     area: number;
     region: string;
+    unMember: boolean;
 }
 
 export interface PaisesData {

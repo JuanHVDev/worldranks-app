@@ -4,8 +4,16 @@ import { Paises, PaisesData as PaisesResponse } from "@/interfaces/paises";
 import { Flags, Name } from "../interfaces/paises";
 import { revalidatePath } from "next/cache";
 
-export const getPaisesAll = async (): Promise<Paises[]> => {
-    const res = await fetch("https://restcountries.com/v3.1/all");
+export const getPaisesAll = async (status: string): Promise<Paises[]> => {
+    const res = await fetch(
+        `https://restcountries.com/v3.1/${
+            status
+                ? `independent?status=${
+                      status === "independent" ? "true&" : "false&"
+                  }`
+                : "all?"
+        }fields=region,name,flags,population,area,unMember`
+    );
     const paisesData = await res.json();
 
     const paises = paisesData.map((pais: PaisesResponse) => ({
@@ -14,6 +22,7 @@ export const getPaisesAll = async (): Promise<Paises[]> => {
         population: pais.population,
         area: pais.area,
         region: pais.region,
+        unMember: pais.unMember,
     }));
 
     return paises;
@@ -21,11 +30,15 @@ export const getPaisesAll = async (): Promise<Paises[]> => {
 
 export const paisesbySort = async (
     sortDirection: string,
-    regions: string[]
+    regions: string[],
+    member: string,
+    independent: string
 ) => {
-    let paises = await getPaisesAll();
-    //Ordena por población en forma descendente
+    let paises = await getPaisesAll(independent);
 
+    if (member === "member") {
+        paises = paises.filter((pais) => pais.unMember);
+    }
     if (sortDirection === "name") {
         paises = paises
             .sort((a, b) => {
@@ -35,7 +48,6 @@ export const paisesbySort = async (
                 if (a.name.toLowerCase() < b.name.toLowerCase()) {
                     return -1;
                 }
-
                 return 0;
             })
             .filter((pais) =>

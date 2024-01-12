@@ -1,27 +1,28 @@
 "use client"
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useRef } from 'react'
-import { useState } from 'react';
-import { useDebouncedCallback } from 'use-debounce'
+import React, { useEffect, useState } from 'react'
+import { getCookie, setCookie } from "cookies-next"
 export const RegionList = () =>
 {
   // Get the current pathname and search params.
   const router = useRouter()
-  const pathname = usePathname()
   const searchParams = useSearchParams()
-
   // Create a state variable to store our data in. We start with an empty array
   const [regiones, setRegiones] = useState<string[]>([])
+
+
   useEffect(() =>
   {
-    // console.log(regiones)
+    const params = searchParams.get('sort')
+    const newPathName = updateURLSearchParams()
+    if (regiones.length === 0) router.replace('?sort=' + params + '&' + newPathName)
     if (regiones.length > 0)
     {
-      const params = searchParams.get('sort')
       const newPathName = updateURLSearchParams()
+      setCookie('regions', regiones.join(','))
       router.replace('?sort=' + params + '&' + newPathName)
     }
-  }, [regiones])
+  }, [regiones, router, setRegiones])
 
   const updateURLSearchParams = () =>
   {
@@ -32,7 +33,7 @@ export const RegionList = () =>
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
   {
-    if (regiones.includes(e.target.value))
+    if (regiones.includes(e.target.value) && !e.target.checked)
     {
       setRegiones((state) => [...state.filter((r) => r !== e.target.value)])
     } else
