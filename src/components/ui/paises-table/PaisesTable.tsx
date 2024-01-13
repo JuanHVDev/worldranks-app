@@ -1,6 +1,7 @@
 import { Paises } from '@/interfaces/paises'
 import Image from 'next/image'
 import React from 'react'
+import { PaisesItem } from './PaisesItem';
 interface Props
 {
   paises: Paises[]
@@ -27,23 +28,8 @@ export const PaisesTable = ({ paises }: Props) =>
                   paises.map(pais =>
                   {
                     return (
-                      <tr className="text-primary" key={pais.name}>
-                        <td className="whitespace-nowrap lg:px-6 lg:py-4">
-                          <Image src={pais.flag} alt='flag' width={450} height={450} className='w-40' />
-                        </td>
-                        <td className="whitespace-nowrap lg:px-6 lg:py-4">
-                          {pais.name}
-                        </td>
-                        <td className="whitespace-nowrap lg:px-6 lg:py-4">
-                          {pais.population}
-                        </td>
-                        <td className="whitespace-nowrap lg:px-6 lg:py-4">
-                          {pais.area}
-                        </td>
-                        <td className="whitespace-nowrap lg:px-6 lg:py-4">
-                          {pais.region}
-                        </td>
-                      </tr>
+
+                      <PaisesItem pais={pais} key={pais.population * pais.area} />
                     )
                   })
                 }

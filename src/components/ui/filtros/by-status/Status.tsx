@@ -10,6 +10,13 @@ export const Status = () =>
   const [memberStatus, setMemberStatus] = useState(searchParams.get('member') || '');
   const [independentStatus, setIndependentStatus] = useState(searchParams.get('independent') || '');
 
+  useEffect(() =>
+  {
+    setMemberStatus(searchParams.get('member') ? 'member' : '');
+    setIndependentStatus(searchParams.get('independent') ? 'independent' : '');
+  }, [searchParams]);
+
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>, statusType: string) =>
   {
     const { id, checked } = e.target;
@@ -72,12 +79,6 @@ export const Status = () =>
   {
     return ['americas', 'europe', 'africa', 'asia', 'oceania', 'antarctic'].includes(region);
   };
-  useEffect(() =>
-  {
-    setMemberStatus(searchParams.get('member') || '');
-    setIndependentStatus(searchParams.get('independent') || '');
-  }, [searchParams]);
-
   return (
     <div>
       <p>Status</p>
@@ -87,7 +88,7 @@ export const Status = () =>
             type="checkbox"
             name="member"
             id="member"
-            checked={memberStatus === 'member'}
+            checked={memberStatus === 'member' ? true : false}
             className="peer hidden"
             value="member"
             onChange={(e) => handleChange(e, 'member')}

@@ -1,6 +1,7 @@
 import { getPaisesAll, paisesbySort } from '@/actions/paisesList'
 import { PaisesTable, RegionList, Sort, Status, TopMenu } from '@/components'
 import Image from 'next/image'
+import { Suspense } from 'react';
 
 
 export const metadata = {
@@ -20,7 +21,9 @@ export default async function Home({ searchParams }: Props)
   const independent = typeof searchParams.independent === 'string' ? searchParams.independent : ''
   const member = typeof searchParams.member === 'string' ? searchParams.member : ''
   const regionesUpdate = regiones ? (regiones as string).split(',') : []
-  const paises = await paisesbySort(sortDirection, regionesUpdate, member, independent)
+  const search = searchParams?.search || '';
+
+  const paises = await paisesbySort(sortDirection, regionesUpdate, member, independent, search)
 
   return (
     <main className='bg-background w-screen -top-40 lg:w-[950px] xl:w-[1200px] relative lg:-top-28 lg:px-6 lg:p-6  xl:-top-12 mx-auto rounded-md px-8 p-10 text-secundary sm:flex sm:flex-col'>

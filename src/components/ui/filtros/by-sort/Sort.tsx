@@ -11,7 +11,10 @@ export const Sort = () =>
   const searchParams = useSearchParams()
   useEffect(() =>
   {
-    const params = searchParams.get('regions')
+    const regions = searchParams.get('regions')
+    const member = searchParams.get('member')
+    const independent = searchParams.get('independent')
+    let params = `&regions=${regions ? regions : ''}&member=${member ? member : ''}&independent=${independent ? independent : ''}`
     if (!sortBy)
     {
       setSortBy('population')
@@ -19,12 +22,26 @@ export const Sort = () =>
       router.push(pathname + '?' + newPathName.toString() + 'population')
     }
     const newPathName = updateURLSearchParams()
-    if (params)
+    if (regions)
     {
-      router.replace(pathname + '?regions=' + params + '&' + newPathName)
+      router.replace(pathname + '?regions=' + regions + '&' + newPathName)
     } else
     {
-      router.replace(pathname + '?' + newPathName)
+      router.replace(pathname + '?' + newPathName + params)
+    }
+    if (member)
+    {
+      router.replace(pathname + '?member=' + member + '&' + newPathName)
+    } else
+    {
+      router.replace(pathname + '?' + newPathName + params)
+    }
+    if (independent)
+    {
+      router.replace(pathname + '?independent=' + independent + '&' + newPathName)
+    } else
+    {
+      router.replace(pathname + '?' + newPathName + params)
     }
 
 

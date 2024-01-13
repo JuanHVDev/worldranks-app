@@ -48,7 +48,7 @@ export const RegionList = () =>
       <p className='my-4'>Región</p>
       <div className='flex w-48 flex-wrap'>
         <div>
-          <input type="checkbox" name="americas" id="americas" className='hidden peer' value={'americas'} onChange={(e) => handleChange(e)} />
+          <input type="checkbox" name="americas" id="americas" checked={regiones.includes('americas') ? true : false} className='hidden peer' value={'americas'} onChange={(e) => handleChange(e)} />
           <label htmlFor='americas' className='block peer-checked:text-primary peer-checked:bg-backgroundSecundary w-fit rounded-lg p-2'>Americas</label>
         </div>
         <div>

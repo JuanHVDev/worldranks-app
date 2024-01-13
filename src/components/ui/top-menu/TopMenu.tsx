@@ -1,3 +1,5 @@
+"use client"
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 interface Props
 {
@@ -5,6 +7,18 @@ interface Props
 }
 export const TopMenu = ({ total }: Props) =>
 {
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const { replace } = useRouter()
+  const handleChange = (term: string) =>
+  {
+    const params = new URLSearchParams(searchParams)
+    if (term) { params.set('search', term) } else
+    {
+      params.delete('search')
+    }
+    replace(`${pathname}?${params.toString()}`);
+  }
   return (
     <div className='flex justify-between'>
       <div>
@@ -18,6 +32,11 @@ export const TopMenu = ({ total }: Props) =>
           </svg>
         </button>
         <input
+          onChange={(e) =>
+          {
+            handleChange(e.target.value);
+          }}
+          defaultValue={searchParams.get('query')?.toString()}
           type="text"
           className="w-full flex bg-transparent placeholder:text-sm pl-1 text-primary outline-0"
           placeholder="Search by Name, Region, Subregion"

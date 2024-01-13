@@ -1,6 +1,11 @@
 "use server";
 
-import { Paises, PaisesData as PaisesResponse } from "@/interfaces/paises";
+import {
+    Pais,
+    Paises,
+    PaisesData,
+    PaisesData as PaisesResponse,
+} from "@/interfaces/paises";
 import { Flags, Name } from "../interfaces/paises";
 import { revalidatePath } from "next/cache";
 
@@ -28,14 +33,29 @@ export const getPaisesAll = async (status: string): Promise<Paises[]> => {
     return paises;
 };
 
+export const getPais = async (name: string) => {
+    try {
+        const data = await fetch(`https://restcountries.com/v3.1/name/${name}`);
+        const country = await data.json();
+        return country;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 export const paisesbySort = async (
     sortDirection: string,
     regions: string[],
     member: string,
-    independent: string
+    independent: string,
+    search: string
 ) => {
     let paises = await getPaisesAll(independent);
-
+    if (search) {
+        paises = paises.filter(
+            (pais) => pais.name.toLowerCase() === search.toLowerCase()
+        );
+    }
     if (member === "member") {
         paises = paises.filter((pais) => pais.unMember);
     }
