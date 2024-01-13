@@ -48,7 +48,7 @@ export const paisesbySort = async (
     regions: string[],
     member: string,
     independent: string,
-    search: string
+    search?: string
 ) => {
     let paises = await getPaisesAll(independent);
     if (search) {

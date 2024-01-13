@@ -23,7 +23,7 @@ export default async function Home({ searchParams }: Props)
   const regionesUpdate = regiones ? (regiones as string).split(',') : []
   const search = searchParams?.search || '';
 
-  const paises = await paisesbySort(sortDirection, regionesUpdate, member, independent, search)
+  const paises = await paisesbySort(sortDirection, regionesUpdate, member, independent, search as string)
 
   return (
     <main className='bg-background w-screen -top-40 lg:w-[950px] xl:w-[1200px] relative lg:-top-28 lg:px-6 lg:p-6  xl:-top-12 mx-auto rounded-md px-8 p-10 text-secundary sm:flex sm:flex-col'>
